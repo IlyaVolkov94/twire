@@ -1,30 +1,50 @@
 #include <stdio.h>
 
-void main (void)
+int main (void)
 {
-    const int nominalAtmosphereTemperature = 25;
-    const double nominalWireTemperature = 65.0;
+    const int nominalAtmosphereTemperature = 25,
+        nominalWireTemperature = 65.0;
 
-    double realWireTemperature = 70.0,
-        realAtmosphereTemperature = 60.0,
+    float realWireTemperature,
+        realAtmosphereTemperature,
         nominalCurrent,
         realCurrent;
 
-    _Bool isTemperature;
+    int isTemperature;
     
-    scanf("\nРасчет тока - 0, расчет температуры - 1\n %u", &isTemperature);
+    printf("\nРасчет тока - 0, расчет температуры - 1\n");
+    scanf("%u", &isTemperature);
     
     if(isTemperature)
     {
-        scanf("\nЧерез пробел вводим: температуру окружающей среды, табличный ток, желаемый ток\n %f %f %f",
+        printf("\nВыбран расчет температуры."
+            "\nЧерез пробел вводим: температуру окружающей среды, табличный ток, желаемый ток\n"
+            );
+
+        scanf("%f %f %f",
             &realAtmosphereTemperature,
             &nominalCurrent,
             &realCurrent
             );
 
-        realWireTemperature = realAtmosphereTemperature + (nominalWireTemperature - nominalAtmosphereTemperature)
+        realWireTemperature = realAtmosphereTemperature + 
+        ((float)nominalWireTemperature - (float)nominalAtmosphereTemperature)
             * (realCurrent*realCurrent)/(nominalCurrent*nominalCurrent);
-        printf("\nРассчетная температура жилы: %.1f/n", realWireTemperature);
+
+        printf("\nРассчетная температура жилы: %.1f\n", realWireTemperature);
+    }
+
+    else
+    {
+        printf("\nВыбран расчет тока."
+            "\nЧерез пробел вводим: температуру окружающей среды, табличный ток, желаемую температуру жилы\n"
+            );
+        
+        scanf("%f %f %f",
+            &realAtmosphereTemperature,
+            &nominalCurrent,
+            &realWireTemperature
+            );
     }
 
     return 0;
