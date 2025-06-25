@@ -1,5 +1,22 @@
 #include <stdio.h>
 
+float sqRoot(float sq)
+{
+    if (sq > 1)
+    {
+        float i, sqrt; 
+        sqrt = 1.0001;
+        i = sqrt;
+        for (; sq - i > 0.0001; sqrt += 0.0001)
+        {
+            i = sqrt;
+            i *= i;
+        }
+        return sqrt;
+    }
+    
+}
+
 int main (void)
 {
     const int nominalAtmosphereTemperature = 25,
@@ -11,7 +28,7 @@ int main (void)
         realCurrent;
 
     int isTemperature;
-    
+
     printf("\nРасчет тока - 0, расчет температуры - 1\n");
     scanf("%u", &isTemperature);
     
@@ -27,8 +44,8 @@ int main (void)
             &realCurrent
             );
 
-        realWireTemperature = realAtmosphereTemperature + 
-        ((float)nominalWireTemperature - (float)nominalAtmosphereTemperature)
+        realWireTemperature = realAtmosphereTemperature
+            + ((float)nominalWireTemperature - (float)nominalAtmosphereTemperature)
             * (realCurrent*realCurrent)/(nominalCurrent*nominalCurrent);
 
         printf("\nРассчетная температура жилы: %.1f\n", realWireTemperature);
@@ -45,6 +62,11 @@ int main (void)
             &nominalCurrent,
             &realWireTemperature
             );
+
+        float sqRealCurrent = (realWireTemperature * nominalCurrent * nominalCurrent - realAtmosphereTemperature) 
+            / (nominalWireTemperature - nominalAtmosphereTemperature);
+
+        
     }
 
     return 0;
