@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-float sqRoot(float sq)
+float sqRoot(float sq) //Возвращает квадратный корень числа sq
 {
     if (sq > 1)
     {
@@ -63,10 +63,11 @@ int main (void)
             &realWireTemperature
             );
 
-        float sqRealCurrent = (realWireTemperature * nominalCurrent * nominalCurrent - realAtmosphereTemperature) 
+        float sqRealCurrent = (nominalCurrent * nominalCurrent * (realWireTemperature - realAtmosphereTemperature)) 
             / (nominalWireTemperature - nominalAtmosphereTemperature);
 
-        
+        realCurrent = sqRoot(sqRealCurrent);
+        printf("\nРассчетный допустимый ток: % .1f\n", realCurrent);
     }
 
     return 0;
