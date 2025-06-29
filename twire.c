@@ -62,7 +62,7 @@ void calculateCurrent(void) //Расчитывает ток жилы
         );
 
     float f_sqRealCurrent = (f_nominalCurrent * f_nominalCurrent * (f_realWireTemperature - f_realAtmosphereTemperature)) 
-        / (f_nominalTemperatureDiff);
+        / f_nominalTemperatureDiff;
 
     f_realCurrent = sqRoot(f_sqRealCurrent);
     printf("\nРассчетный допустимый ток: % .1f\n", f_realCurrent);
@@ -72,12 +72,12 @@ void calculateCurrent(void) //Расчитывает ток жилы
 
 int main (void)
 {
-    int isTemperature;
+    int i_isTemperature;
 
     printf("\nРасчет тока - 0, расчет температуры - 1\n");
-    scanf("%u", &isTemperature);
+    scanf("%u", &i_isTemperature);
     
-    if(isTemperature)
+    if(i_isTemperature)
     {
         calculateTemperature();
     }
