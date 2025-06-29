@@ -1,32 +1,77 @@
 #include <stdio.h>
 
-float sqRoot(float sq) //Возвращает квадратный корень числа sq
+float sqRoot(float f_sq) //Возвращает квадратный корень числа f_sq
 {
-    if (sq > 1)
+    if (f_sq > 1)
     {
-        float i, sqrt; 
-        sqrt = 1.0001;
-        i = sqrt;
-        for (; sq - i > 0.0001; sqrt += 0.0001)
+        float f_i, f_sqrt; 
+        f_sqrt = 1.0001;
+        f_i = f_sqrt;
+        for (; f_sq - f_i > 0.0001; f_sqrt += 0.0001)
         {
-            i = sqrt;
-            i *= i;
+            f_i = f_sqrt;
+            f_i *= f_i;
         }
-        return sqrt;
+        return f_sqrt;
     }
     
 }
 
+void calculateTemperature(void) //Рассчитывает температуру жилы
+{
+    const float f_nominalTemperatureDiff = 40;
+
+    float f_realWireTemperature,
+        f_realAtmosphereTemperature,
+        f_nominalCurrent,
+        f_realCurrent;
+
+    printf("\nВыбран расчет температуры."
+        "\nЧерез пробел вводим: температуру окружающей среды, табличный ток, желаемый ток\n"
+        );
+
+    scanf("%f %f %f",
+        &f_realAtmosphereTemperature,
+        &f_nominalCurrent,
+        &f_realCurrent
+        );
+
+    f_realWireTemperature = f_realAtmosphereTemperature
+        + f_nominalTemperatureDiff * (f_realCurrent*f_realCurrent)/(f_nominalCurrent*f_nominalCurrent);
+
+    printf("\nРассчетная температура жилы: %.1f\n", f_realWireTemperature);
+}
+
+void calculateCurrent(void) //Расчитывает ток жилы
+{
+    const float f_nominalTemperatureDiff = 40;
+
+    float f_realWireTemperature,
+        f_realAtmosphereTemperature,
+        f_nominalCurrent,
+        f_realCurrent;
+
+    printf("\nВыбран расчет тока."
+        "\nЧерез пробел вводим: температуру окружающей среды, табличный ток, желаемую температуру жилы\n"
+        );
+        
+    scanf("%f %f %f",
+        &f_realAtmosphereTemperature,
+        &f_nominalCurrent,
+        &f_realWireTemperature
+        );
+
+    float f_sqRealCurrent = (f_nominalCurrent * f_nominalCurrent * (f_realWireTemperature - f_realAtmosphereTemperature)) 
+        / (f_nominalTemperatureDiff);
+
+    f_realCurrent = sqRoot(f_sqRealCurrent);
+    printf("\nРассчетный допустимый ток: % .1f\n", f_realCurrent);
+}
+
+
+
 int main (void)
 {
-    const int nominalAtmosphereTemperature = 25,
-        nominalWireTemperature = 65.0;
-
-    float realWireTemperature,
-        realAtmosphereTemperature,
-        nominalCurrent,
-        realCurrent;
-
     int isTemperature;
 
     printf("\nРасчет тока - 0, расчет температуры - 1\n");
@@ -34,40 +79,12 @@ int main (void)
     
     if(isTemperature)
     {
-        printf("\nВыбран расчет температуры."
-            "\nЧерез пробел вводим: температуру окружающей среды, табличный ток, желаемый ток\n"
-            );
-
-        scanf("%f %f %f",
-            &realAtmosphereTemperature,
-            &nominalCurrent,
-            &realCurrent
-            );
-
-        realWireTemperature = realAtmosphereTemperature
-            + ((float)nominalWireTemperature - (float)nominalAtmosphereTemperature)
-            * (realCurrent*realCurrent)/(nominalCurrent*nominalCurrent);
-
-        printf("\nРассчетная температура жилы: %.1f\n", realWireTemperature);
+        calculateTemperature();
     }
 
     else
     {
-        printf("\nВыбран расчет тока."
-            "\nЧерез пробел вводим: температуру окружающей среды, табличный ток, желаемую температуру жилы\n"
-            );
-        
-        scanf("%f %f %f",
-            &realAtmosphereTemperature,
-            &nominalCurrent,
-            &realWireTemperature
-            );
-
-        float sqRealCurrent = (nominalCurrent * nominalCurrent * (realWireTemperature - realAtmosphereTemperature)) 
-            / (nominalWireTemperature - nominalAtmosphereTemperature);
-
-        realCurrent = sqRoot(sqRealCurrent);
-        printf("\nРассчетный допустимый ток: % .1f\n", realCurrent);
+        calculateCurrent();
     }
 
     return 0;
