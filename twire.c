@@ -2,17 +2,18 @@
 
 float sqRoot(float f_sq) //Возвращает квадратный корень числа f_sq
 {
-    if (f_sq > 1)
+    if (f_sq >= 1) //Расчет тока менее 1А считаю нецелесообразным 
     {
         float f_i, f_sqrt; 
-        for (f_sqrt = 1.0001, f_i = f_sqrt; f_sq - f_i > 0.0001; f_sqrt += 0.0001)
+        for (f_sqrt = 1.0, f_i = f_sqrt; f_sq - f_i > 0.0001; f_sqrt += 0.0001)
         {
             f_i = f_sqrt;
             f_i *= f_i;
         }
         return f_sqrt;
     }
-    
+
+    else return 0;    
 }
 
 void calculateTemperature(void) //Рассчитывает температуру жилы
