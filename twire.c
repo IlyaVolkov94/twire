@@ -71,21 +71,29 @@ void calculateCurrent(void) //Расчитывает ток жилы
 
 int main (void)
 {
-    int i_isTemperature;
-
     printf("\nРасчет тока - 0, расчет температуры - 1\n");
-    scanf("%u", &i_isTemperature);
-    
-    if(i_isTemperature)
+  
+    while (1)
     {
-        calculateTemperature();
-    }
+        char choice = getchar();
+        if('\n' == choice)
+           continue;
 
-    else
-    {
-        calculateCurrent();
+        switch (choice)
+        {
+            case '0':
+                calculateCurrent();
+                break;
+            case '1':
+                calculateTemperature();
+                break;
+            default:
+                printf("\nДля расчета тока введит: 0, для рачета температуры: 1\n");
+                continue;
+                break;
+        }
+        break;
     }
-
+      
     return 0;
-
 }
