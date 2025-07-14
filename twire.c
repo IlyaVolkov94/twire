@@ -80,11 +80,11 @@ int main (void)
     {
         printf("\nДля расчета введите:\n\t0 - расчет тока\n\t1 - расчет температуры\n");
         int choice;
-        if(0 == scanf("%d", &choice))
+        int state = scanf("%d", &choice);
+        if (EOF == state)
+            break;
+        if(0 == state)
         {
-            short quit = getchar();
-            if(quit == 'q' || quit == 'Q')
-                break;
             clean();
             continue;
         }
