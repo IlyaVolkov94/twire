@@ -82,6 +82,9 @@ int main (void)
         int choice;
         if(0 == scanf("%d", &choice))
         {
+            short quit = getchar();
+            if(quit == 'q' || quit == 'Q')
+                break;
             clean();
             continue;
         }
