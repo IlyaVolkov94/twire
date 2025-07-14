@@ -67,6 +67,11 @@ void calculateCurrent(void) //Расчитывает ток жилы
     printf("\nРассчетный допустимый ток: % .1f\n", f_realCurrent);
 }
 
+void clean(void) //Чистим буфер ввода
+{
+    while (getchar() != '\n')
+        continue;
+}
 
 
 int main (void)
@@ -77,10 +82,10 @@ int main (void)
         int choice;
         if(0 == scanf("%d", &choice))
         {
-            while (getchar() != '\n') //Чистим буфер ввода
-                continue;
+            clean();
             continue;
         }
+        clean();
         switch (choice)
         {
             case 0:
