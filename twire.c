@@ -27,6 +27,7 @@ int main (void)
                 printf("\nДопустимая расчетная температура: %.1f\n", calculateTemperature());
                 break;
             default:
+                printf("\nДля выхода из программы:\n\tctrl+Z для Windows\n\tctrl+D для Linux");
                 break;
         }
     }
