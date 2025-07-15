@@ -1,107 +1,111 @@
 #include <stdio.h>
 
-float sqRoot(float f_sq) //Возвращает квадратный корень числа f_sq
+#define A 1 //Пункты меню
+#define B 2
+
+int getChoice(int a, int b);
+float calculateCurrent(void);
+float calculateTemperature(void);
+
+int main (void)
 {
-    if (f_sq >= 1) //Расчет тока менее 1А считаю нецелесообразным 
+    int choice;
+    while ((choice = getChoice(A, B)) != EOF)
     {
-        float f_i, f_sqrt; 
-        for (f_sqrt = 1.0, f_i = f_sqrt; f_sq - f_i > 0.0001; f_sqrt += 0.0001)
+        switch (choice)
         {
-            f_i = f_sqrt;
-            f_i *= f_i;
+            case A:
+                printf("\nВыбран расчет тока."
+                    "\nЧерез пробел вводим: температуру окружающей среды, табличный ток, желаемую температуру жилы\n"
+                    );
+                printf("\nДопустимый расчетный ток: %.1f\n", calculateCurrent());
+                break;
+            case B:
+                printf("\nВыбран расчет температуры."
+                    "\nЧерез пробел вводим: температуру окружающей среды, табличный ток, желаемый ток\n"
+                    );
+                printf("\nДопустимая расчетная температура: %.1f\n", calculateTemperature());
+                break;
+            default:
+                break;
         }
-        return f_sqrt;
     }
-
-    else return 0;    
+    printf("Завершение работы\n");
+    return 0;
 }
 
-void calculateTemperature(void) //Рассчитывает температуру жилы
-{
-    const float f_nominalTemperatureDiff = 40;
-
-    float f_realWireTemperature,
-        f_realAtmosphereTemperature,
-        f_nominalCurrent,
-        f_realCurrent;
-
-    printf("\nВыбран расчет температуры."
-        "\nЧерез пробел вводим: температуру окружающей среды, табличный ток, желаемый ток\n"
-        );
-
-    scanf("%f %f %f",
-        &f_realAtmosphereTemperature,
-        &f_nominalCurrent,
-        &f_realCurrent
-        );
-
-    f_realWireTemperature = f_realAtmosphereTemperature
-        + f_nominalTemperatureDiff * (f_realCurrent*f_realCurrent)/(f_nominalCurrent*f_nominalCurrent);
-
-    printf("\nРассчетная температура жилы: %.1f\n", f_realWireTemperature);
-}
-
-void calculateCurrent(void) //Расчитывает ток жилы
-{
-    const float f_nominalTemperatureDiff = 40;
-
-    float f_realWireTemperature,
-        f_realAtmosphereTemperature,
-        f_nominalCurrent,
-        f_realCurrent;
-
-    printf("\nВыбран расчет тока."
-        "\nЧерез пробел вводим: температуру окружающей среды, табличный ток, желаемую температуру жилы\n"
-        );
-        
-    scanf("%f %f %f",
-        &f_realAtmosphereTemperature,
-        &f_nominalCurrent,
-        &f_realWireTemperature
-        );
-
-    float f_sqRealCurrent = (f_nominalCurrent * f_nominalCurrent * (f_realWireTemperature - f_realAtmosphereTemperature)) 
-        / f_nominalTemperatureDiff;
-
-    f_realCurrent = sqRoot(f_sqRealCurrent);
-    printf("\nРассчетный допустимый ток: % .1f\n", f_realCurrent);
-}
-
-void clean(void) //Чистим буфер ввода
+void clean(void) //Чистит буфер ввода
 {
     while (getchar() != '\n')
         continue;
 }
 
-
-int main (void)
+int getChoice(int a, int b) //Обрабатывает меню выбора операции
 {
-    while (1)
-    {
-        printf("\nДля расчета введите:\n\t0 - расчет тока\n\t1 - расчет температуры\n");
+        printf("\nДля расчета введите:\n\t%d - расчет тока\n\t%d - расчет температуры\n", a, b);
         int choice;
         int state = scanf("%d", &choice);
         if (EOF == state)
-            break;
-        if(0 == state)
+            return EOF;
+        if(1 == state)
         {
             clean();
-            continue;
+            return choice;
         }
         clean();
-        switch (choice)
+        return 0;
+}
+
+float sqRoot(float sq) //Возвращает квадратный корень числа sq
+{
+    if (sq >= 1) //Расчет тока менее 1А считаю нецелесообразным 
+    {
+        float i, sqrt; 
+        for (sqrt = 1.0, i = sqrt; sq - i > 0.0001; sqrt += 0.0001)
         {
-            case 0:
-                calculateCurrent();
-                continue;
-            case 1:
-                calculateTemperature();
-                continue;
-            default:
-                continue;
+            i = sqrt;
+            i *= i;
         }
-        break;
+        return sqrt;
     }
-      
-    return 0;
+    else return 0;    
+}
+
+float calculateTemperature(void) //Принимает данные из потока ввода и расчитывает температуру жилы
+{
+    const short NominalTemperatureDiff = 40;
+    float realWireTemperature,
+        realAtmosphereTemperature,
+        nominalCurrent,
+        realCurrent;
+
+    scanf("%f %f %f",
+        &realAtmosphereTemperature,
+        &nominalCurrent,
+        &realCurrent
+        );
+
+    realWireTemperature = realAtmosphereTemperature
+        + (float)NominalTemperatureDiff * (realCurrent*realCurrent)/(nominalCurrent*nominalCurrent);
+    return realWireTemperature;
+}
+
+float calculateCurrent(void) //Принимает данные из потока ввода и расчитывает ток жилы
+{
+    const short NominalTemperatureDiff = 40;
+    float realWireTemperature,
+        realAtmosphereTemperature,
+        nominalCurrent,
+        realCurrent;
+
+    scanf("%f %f %f",
+        &realAtmosphereTemperature,
+        &nominalCurrent,
+        &realWireTemperature
+        );
+
+    float f_sqRealCurrent = (nominalCurrent * nominalCurrent * (realWireTemperature - realAtmosphereTemperature)) 
+        / (float)NominalTemperatureDiff;
+    realCurrent = sqRoot(f_sqRealCurrent);
+    return realCurrent;
 }
